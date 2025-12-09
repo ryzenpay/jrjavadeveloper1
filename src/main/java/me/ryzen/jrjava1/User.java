@@ -93,7 +93,7 @@ public class User {
         return this.dead;
     }
 
-    public static String[] getColumnNames(){
+    public static ArrayList<String> getColumnNames(){
         // TODO: make adaptive work
         // also needs to be used in getRow then
         // ArrayList<String> fieldNames  = new ArrayList<>();
@@ -101,7 +101,7 @@ public class User {
         //     fieldNames.add(field.getName());
         // }
         // return fieldNames;
-        return new String[]{"First Name", "Last Name", "Age", "Species", "Deceased"};
+        return new ArrayList<>(Arrays.asList(new String[]{"First Name", "Last Name", "Age", "Species", "Deceased"}));
     }
 
     @Override
@@ -109,11 +109,11 @@ public class User {
         return firstName + lastName;
     }
 
-    public Object[] getRow(){
-        return new Object[]{this.firstName, this.lastName, this.age, this.species, this.dead};
+    public ArrayList<Object> getRow(){
+        return new ArrayList<>(Arrays.asList(new Object[]{this.firstName, this.lastName, this.age, this.species, this.dead}));
     }
 
     public Object getRowValue(int i){
-        return Arrays.asList(this.getRow()).get(i);
+        return this.getRow().get(i);
     }
 }

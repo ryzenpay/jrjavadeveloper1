@@ -1,7 +1,6 @@
 package me.ryzen.jrjava1;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -22,7 +21,7 @@ public class Model extends AbstractTableModel{
     
     @Override
     public int getColumnCount(){
-        return User.getColumnNames().length;
+        return User.getColumnNames().size();
     }
 
     @Override
@@ -41,6 +40,6 @@ public class Model extends AbstractTableModel{
 
     @Override
     public String getColumnName(int col) {
-        return Arrays.asList(User.getColumnNames()).get(col);
+        return User.getColumnNames().get(col);
     }
 }

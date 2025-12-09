@@ -1,6 +1,7 @@
 package me.ryzen.jrjava1;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
@@ -12,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -68,14 +68,10 @@ public class App {
     private static JTable getUserTable(){
         Session session = factory.openSession();
         session.beginTransaction();
-        DefaultTableModel tableModel = new DefaultTableModel();
-        tableModel.setColumnIdentifiers(User.getColumnNames());
         List<User> users = session.createQuery("FROM User").list();
-        for (User user:users){
-            tableModel.addRow(user.getRow());
-        }
+        Model model = new Model(new ArrayList<>(users));
         session.close();
-        return new JTable(tableModel);
+        return new JTable(model);
     }
 
     private static void initFrame(){

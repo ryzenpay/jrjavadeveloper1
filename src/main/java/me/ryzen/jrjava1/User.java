@@ -2,6 +2,7 @@ package me.ryzen.jrjava1;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -110,5 +111,9 @@ public class User {
 
     public Object[] getRow(){
         return new Object[]{this.firstName, this.lastName, this.age, this.species, this.dead};
+    }
+
+    public Object getRowValue(int i){
+        return Arrays.asList(this.getRow()).get(i);
     }
 }

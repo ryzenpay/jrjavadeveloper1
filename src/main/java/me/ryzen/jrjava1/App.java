@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.util.List;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -51,40 +52,15 @@ public class App {
 
         if (userCount.longValue() == 0) {
             logger.info("No data found. Populating database with dummy data...");
-            User user1 = new User();
-            user1.setFirstName("Pim");
-            user1.setLastName("Pimling");
-            user1.setSpecies("Critter");
-            session.save(user1);
-
-            User user2 = new User();
-            user2.setFirstName("Charlie");
-            user2.setLastName("Dompler");
-            user2.setSpecies("Critter");
-            session.save(user2);
-
-            User user3 = new User();
-            user3.setFirstName("Alan");
-            user3.setLastName("Red");
-            user3.setSpecies("Critter");
-            session.save(user3);
-
-            User user4 = new User();
-            user4.setFirstName("Glep");
-            user4.setLastName("");
-            user4.setSpecies("Critter");
-            session.save(user4);
-
-            User user5 = new User();
-            user5.setFirstName("Mr.");
-            user5.setLastName("Boss");
-            user5.setSpecies("Human");
-            session.save(user5);
-
+            session.save(new User("Pim", "Pimling", 33, "Critter", false));
+            session.save(new User("Charlie", "Dompler", 27, "Critter", false));
+            session.save(new User("Alan", "Red", 24, "Critter", false));
+            session.save(new User("Glep", "", 1696, "Critter", false));
+            session.save(new User("Mr.", "Boss", -1, "Human", false));
             session.getTransaction().commit();
             logger.info("Dummy data has been inserted.");
         } else {
-            logger.info("Database already contains data. Skipping dummy data insertion.");
+            logger.info("Database already contains data. Skipping dummy data");
         }
         session.close();
     }
@@ -93,12 +69,10 @@ public class App {
         Session session = factory.openSession();
         session.beginTransaction();
         DefaultTableModel tableModel = new DefaultTableModel();
-        String[] columns = {"First Name", "Last Name", "Species"};
-        tableModel.setColumnIdentifiers(columns);
+        tableModel.setColumnIdentifiers(User.getColumnNames());
         List<User> users = session.createQuery("FROM User").list();
         for (User user:users){
-            String[] row = {user.getFirstName(), user.getLastName(), user.getSpecies()};
-            tableModel.addRow(row);
+            tableModel.addRow(user.getRow());
         }
         session.close();
         return new JTable(tableModel);
@@ -106,6 +80,7 @@ public class App {
 
     private static void initFrame(){
         JPanel textPanel = new JPanel(new BorderLayout());
+        JLabel searchLabel = new JLabel("Search:");
         JTextField textField = new JTextField();
         JTable table = getUserTable();
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
@@ -139,7 +114,8 @@ public class App {
             }
         });
         
-        textPanel.add(textField);
+        textPanel.add(searchLabel, BorderLayout.WEST);
+        textPanel.add(textField, BorderLayout.CENTER);
         frame.add(textPanel, BorderLayout.SOUTH);
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
 
